@@ -1,7 +1,13 @@
 import 'package:clima_weather_app/controller/global_controller.dart';
+import 'package:clima_weather_app/utils/custom_colors.dart';
+import 'package:clima_weather_app/view/widgets/comfort_level.dart';
+import 'package:clima_weather_app/view/widgets/daily_data_forecast.dart';
 import 'package:clima_weather_app/view/widgets/header_widget.dart';
+import 'package:clima_weather_app/view/widgets/hourly_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../widgets/current_weather_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,18 +29,56 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Obx(() => globalController.checkLoading().isTrue
             ? const Center(
-                child: CircularProgressIndicator(
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  backgroundImage: AssetImage('assets/icons/clouds.png'),
+                  radius: 60,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
                   strokeWidth: 2,
                 ),
+                ),
               )
-            : ListView(
-                scrollDirection: Axis.vertical,
-                children: const [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  HeaderWidget(),
-                ],
+            : Center(
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const HeaderWidget(),
+                    //for our current temperature ('current')
+                    CurrentWeatherWidget(
+                        weatherDataCurrent: globalController
+                            .getWeatherData()
+                            .getCurrentWeather()),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    HourlyDataWidget(
+                      weatherDataHourly:
+                          globalController.getWeatherData().getHourlyWeather(),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    DailyDataForecast(
+                      weatherDataDaily:
+                          globalController.getWeatherData().getDailyWeather(),
+                    ),
+                    Divider(
+                      thickness: 2,
+                      color: CustomColors.dividerLine.withAlpha(250),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ComfortLevelWidget(
+                      weatherDataCurrent:
+                          globalController.getWeatherData().getCurrentWeather(),
+                    ),
+                  ],
+                ),
               )),
       ),
     );
