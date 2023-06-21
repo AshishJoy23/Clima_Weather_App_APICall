@@ -45,4 +45,4 @@ app.*.map.json
 
 
 # Ignore the API key file named api_key.dart
-lib/api/api_key.dart
+/lib/api/api_key.dart
